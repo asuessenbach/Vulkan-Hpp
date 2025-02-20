@@ -51,10 +51,10 @@ VKAPI_ATTR void VKAPI_CALL vkDestroyDebugUtilsMessengerEXT( VkInstance instance,
   return pfnVkDestroyDebugUtilsMessengerEXT( instance, messenger, pAllocator );
 }
 
-VKAPI_ATTR VkBool32 VKAPI_CALL debugMessageFunc( vk::DebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
-                                                 vk::DebugUtilsMessageTypeFlagsEXT              messageTypes,
-                                                 vk::DebugUtilsMessengerCallbackDataEXT const * pCallbackData,
-                                                 void * /*pUserData*/ )
+vk::Bool32 debugMessageFuncCpp( vk::DebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
+                                vk::DebugUtilsMessageTypeFlagsEXT              messageTypes,
+                                vk::DebugUtilsMessengerCallbackDataEXT const * pCallbackData,
+                                void * /*pUserData*/ )
 {
   std::string message;
 
@@ -99,6 +99,17 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debugMessageFunc( vk::DebugUtilsMessageSeverityFl
 #endif
 
   return false;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL debugMessageFunc( VkDebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
+                                                 VkDebugUtilsMessageTypeFlagsEXT              messageTypes,
+                                                 VkDebugUtilsMessengerCallbackDataEXT const * pCallbackData,
+                                                 void *                                       pUserData )
+{
+  return static_cast<VkBool32>( debugMessageFuncCpp( static_cast<vk::DebugUtilsMessageSeverityFlagBitsEXT>( messageSeverity ),
+                                                     static_cast<vk::DebugUtilsMessageTypeFlagsEXT>( messageTypes ),
+                                                     reinterpret_cast<vk::DebugUtilsMessengerCallbackDataEXT const *>( pCallbackData ),
+                                                     pUserData ) );
 }
 
 bool checkLayers( std::vector<char const *> const & layers, std::vector<vk::LayerProperties> const & properties )

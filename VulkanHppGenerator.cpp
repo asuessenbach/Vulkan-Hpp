@@ -6502,7 +6502,7 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
   std::string str;
   if ( name == "VkAllocationCallbacks" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6511,19 +6511,19 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer types from the vk-namespace instead." )
-    AllocationCallbacks( void *                               pUserData_,
-                         PFN_vkAllocationFunction             pfnAllocation_,
-                         PFN_vkReallocationFunction           pfnReallocation_       = {},
-                         PFN_vkFreeFunction                   pfnFree_               = {},
-                         PFN_vkInternalAllocationNotification pfnInternalAllocation_ = {},
-                         PFN_vkInternalFreeNotification       pfnInternalFree_       = {} ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer of types PFN_vkAllocationFunction, etc. instead." )
+    VULKAN_HPP_CONSTEXPR AllocationCallbacks( void *                                                   pUserData_,
+                                              VULKAN_HPP_NAMESPACE::PFN_AllocationFunction             pfnAllocation_,
+                                              VULKAN_HPP_NAMESPACE::PFN_ReallocationFunction           pfnReallocation_       = {},
+                                              VULKAN_HPP_NAMESPACE::PFN_FreeFunction                   pfnFree_               = {},
+                                              VULKAN_HPP_NAMESPACE::PFN_InternalAllocationNotification pfnInternalAllocation_ = {},
+                                              VULKAN_HPP_NAMESPACE::PFN_InternalFreeNotification       pfnInternalFree_       = {} ) VULKAN_HPP_NOEXCEPT
       : AllocationCallbacks( pUserData_,
-                             reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_AllocationFunction>( pfnAllocation_ ),
-                             reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_ReallocationFunction>( pfnReallocation_ ),
-                             reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_FreeFunction>( pfnFree_ ),
-                             reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_InternalAllocationNotification>( pfnInternalAllocation_ ),
-                             reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_InternalFreeNotification>( pfnInternalFree_ ) )
+                             reinterpret_cast<PFN_vkAllocationFunction>( pfnAllocation_ ),
+                             reinterpret_cast<PFN_vkReallocationFunction>( pfnReallocation_ ),
+                             reinterpret_cast<PFN_vkFreeFunction>( pfnFree_ ),
+                             reinterpret_cast<PFN_vkInternalAllocationNotification>( pfnInternalAllocation_ ),
+                             reinterpret_cast<PFN_vkInternalFreeNotification>( pfnInternalFree_ ) )
     {
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
@@ -6533,7 +6533,7 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
   }
   else if ( name == "VkDebugReportCallbackCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6542,12 +6542,12 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer types from the vk-namespace instead." )
-    DebugReportCallbackCreateInfoEXT( VULKAN_HPP_NAMESPACE::DebugReportFlagsEXT flags_,
-                                      PFN_vkDebugReportCallbackEXT              pfnCallback_,
-                                      void *                                    pUserData_   = {},
-                                      const void *                              pNext_       = nullptr ) VULKAN_HPP_NOEXCEPT
-      : DebugReportCallbackCreateInfoEXT( flags_, reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DebugReportCallbackEXT>( pfnCallback_ ), pUserData_, pNext_ )
+    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer of type PFN_vkDebugReportCallbackEXT instead." )
+    VULKAN_HPP_CONSTEXPR DebugReportCallbackCreateInfoEXT( VULKAN_HPP_NAMESPACE::DebugReportFlagsEXT        flags_,
+                                                           VULKAN_HPP_NAMESPACE::PFN_DebugReportCallbackEXT pfnCallback_,
+                                                           void *                                           pUserData_   = {},
+                                                           const void *                                     pNext_       = nullptr ) VULKAN_HPP_NOEXCEPT
+      : DebugReportCallbackCreateInfoEXT( flags_, reinterpret_cast<PFN_vkDebugReportCallbackEXT>( pfnCallback_ ), pUserData_, pNext_ )
     {
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
@@ -6557,7 +6557,7 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
   }
   else if ( name == "VkDebugUtilsMessengerCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6566,14 +6566,14 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer types from the vk-namespace instead." )
-    DebugUtilsMessengerCreateInfoEXT( VULKAN_HPP_NAMESPACE::DebugUtilsMessengerCreateFlagsEXT flags_,
-                                      VULKAN_HPP_NAMESPACE::DebugUtilsMessageSeverityFlagsEXT messageSeverity_,
-                                      VULKAN_HPP_NAMESPACE::DebugUtilsMessageTypeFlagsEXT     messageType_,
-                                      PFN_vkDebugUtilsMessengerCallbackEXT                    pfnUserCallback_,
-                                      void *                                                  pUserData_       = {},
-                                      const void *                                            pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
-      : DebugUtilsMessengerCreateInfoEXT( flags_, messageSeverity_, messageType_, reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DebugUtilsMessengerCallbackEXT>( pfnUserCallback_ ), pUserData_, pNext_ )
+    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer of type PFN_vkDebugUtilsMessengerCallbackEXTinstead." )
+    VULKAN_HPP_CONSTEXPR DebugUtilsMessengerCreateInfoEXT( VULKAN_HPP_NAMESPACE::DebugUtilsMessengerCreateFlagsEXT  flags_,
+                                                           VULKAN_HPP_NAMESPACE::DebugUtilsMessageSeverityFlagsEXT  messageSeverity_,
+                                                           VULKAN_HPP_NAMESPACE::DebugUtilsMessageTypeFlagsEXT      messageType_,
+                                                           VULKAN_HPP_NAMESPACE::PFN_DebugUtilsMessengerCallbackEXT pfnUserCallback_,
+                                                           void *                                                   pUserData_       = {},
+                                                           const void *                                             pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
+      : DebugUtilsMessengerCreateInfoEXT( flags_, messageSeverity_, messageType_, reinterpret_cast<PFN_vkDebugUtilsMessengerCallbackEXT>( pfnUserCallback_ ), pUserData_, pNext_ )
     {
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
@@ -6583,7 +6583,7 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
   }
   else if ( name == "VkDeviceDeviceMemoryReportCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6592,12 +6592,12 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer types from the vk-namespace instead." )
-    DeviceDeviceMemoryReportCreateInfoEXT( VULKAN_HPP_NAMESPACE::DeviceMemoryReportFlagsEXT flags_,
-                                           PFN_vkDeviceMemoryReportCallbackEXT              pfnUserCallback_,
-                                           void *                                           pUserData_       = {},
-                                           const void *                                     pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
-      : DeviceDeviceMemoryReportCreateInfoEXT( flags_, reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DeviceMemoryReportCallbackEXT>( pfnUserCallback_ ), pUserData_, pNext_ )
+    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer of type PFN_vkDeviceMemoryReportCallbackEXTinstead." )
+    VULKAN_HPP_CONSTEXPR DeviceDeviceMemoryReportCreateInfoEXT( VULKAN_HPP_NAMESPACE::DeviceMemoryReportFlagsEXT        flags_,
+                                                                VULKAN_HPP_NAMESPACE::PFN_DeviceMemoryReportCallbackEXT pfnUserCallback_,
+                                                                void *                                                  pUserData_       = {},
+                                                                const void *                                            pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
+      : DeviceDeviceMemoryReportCreateInfoEXT( flags_, reinterpret_cast<PFN_vkDeviceMemoryReportCallbackEXT>( pfnUserCallback_ ), pUserData_, pNext_ )
     {
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
@@ -6607,7 +6607,7 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
   }
   else if ( name == "DirectDriverLoadingInfoLUNARG" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6616,11 +6616,11 @@ std::string VulkanHppGenerator::generateDeprecatedConstructors( std::string cons
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer types from the vk-namespace instead." )
-    DirectDriverLoadingInfoLUNARG( VULKAN_HPP_NAMESPACE::DirectDriverLoadingFlagsLUNARG flags_,
-                                   PFN_vkGetInstanceProcAddrLUNARG                      pfnGetInstanceProcAddr_,
-                                   void *                                               pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
-      : DirectDriverLoadingInfoLUNARG( flags_, reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_GetInstanceProcAddrLUNARG>( pfnGetInstanceProcAddr_ ), pNext_ )
+    VULKAN_HPP_DEPRECATED( "This constructor is deprecated. Use the one taking function pointer of type PFN_GetInstanceProcAddrLUNARG instead." )
+    VULKAN_HPP_CONSTEXPR DirectDriverLoadingInfoLUNARG( VULKAN_HPP_NAMESPACE::DirectDriverLoadingFlagsLUNARG flags_,
+                                                        VULKAN_HPP_NAMESPACE::PFN_GetInstanceProcAddrLUNARG  pfnGetInstanceProcAddr_,
+                                                        void *                                               pNext_ = nullptr ) VULKAN_HPP_NOEXCEPT
+      : DirectDriverLoadingInfoLUNARG( flags_, reinterpret_cast<PFN_vkGetInstanceProcAddrLUNARG>( pfnGetInstanceProcAddr_ ), pNext_ )
     {
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
@@ -6636,7 +6636,7 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
   std::string str;
   if ( name == "VkAllocationCallbacks" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6645,28 +6645,28 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    AllocationCallbacks & setPfnAllocation( PFN_vkAllocationFunction pfnAllocation_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkAllocationFunction instead." )
+    AllocationCallbacks & setPfnAllocation( VULKAN_HPP_NAMESPACE::PFN_AllocationFunction pfnAllocation_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnAllocation( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_AllocationFunction>( pfnAllocation_ ) );
+      return setPfnAllocation( reinterpret_cast<PFN_vkAllocationFunction>( pfnAllocation_ ) );
     }
 
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    AllocationCallbacks & setPfnReallocation( PFN_vkReallocationFunction pfnReallocation_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkReallocationFunction instead." )
+    AllocationCallbacks & setPfnReallocation( VULKAN_HPP_NAMESPACE::PFN_ReallocationFunction pfnReallocation_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnReallocation( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_ReallocationFunction>( pfnReallocation_ ) );
+      return setPfnReallocation( reinterpret_cast<PFN_vkReallocationFunction>( pfnReallocation_ ) );
     }
 
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    AllocationCallbacks & setPfnInternalAllocation( PFN_vkInternalAllocationNotification pfnInternalAllocation_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkInternalAllocationNotification instead." )
+    AllocationCallbacks & setPfnInternalAllocation( VULKAN_HPP_NAMESPACE::PFN_InternalAllocationNotification pfnInternalAllocation_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnInternalAllocation( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_InternalAllocationNotification>( pfnInternalAllocation_ ) );
+      return setPfnInternalAllocation( reinterpret_cast<PFN_vkInternalAllocationNotification>( pfnInternalAllocation_ ) );
     }
 
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    AllocationCallbacks & setPfnInternalFree( PFN_vkInternalFreeNotification pfnInternalFree_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer if type PFN_vkInternalFreeNotification instead." )
+    AllocationCallbacks & setPfnInternalFree( VULKAN_HPP_NAMESPACE::PFN_InternalFreeNotification pfnInternalFree_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnInternalFree( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_InternalFreeNotification>( pfnInternalFree_ ) );
+      return setPfnInternalFree( reinterpret_cast<PFN_vkInternalFreeNotification>( pfnInternalFree_ ) );
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic pop
@@ -6675,7 +6675,7 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
   }
   else if ( name == "VkDebugReportCallbackCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6684,10 +6684,10 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    DebugReportCallbackCreateInfoEXT & setPfnCallback( PFN_vkDebugReportCallbackEXT pfnCallback_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkDebugReportCallbackEXT instead." )
+    DebugReportCallbackCreateInfoEXT & setPfnCallback( VULKAN_HPP_NAMESPACE::PFN_DebugReportCallbackEXT pfnCallback_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnCallback( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DebugReportCallbackEXT>( pfnCallback_ ) );
+      return setPfnCallback( reinterpret_cast<PFN_vkDebugReportCallbackEXT>( pfnCallback_ ) );
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic pop
@@ -6696,7 +6696,7 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
   }
   else if ( name == "VkDebugUtilsMessengerCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6705,10 +6705,10 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    DebugUtilsMessengerCreateInfoEXT & setPfnUserCallback( PFN_vkDebugUtilsMessengerCallbackEXT pfnUserCallback_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkDebugUtilsMessengerCallbackEXT instead." )
+    DebugUtilsMessengerCreateInfoEXT & setPfnUserCallback( VULKAN_HPP_NAMESPACE::PFN_DebugUtilsMessengerCallbackEXT pfnUserCallback_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnUserCallback( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DebugUtilsMessengerCallbackEXT>( pfnUserCallback_ ) );
+      return setPfnUserCallback( reinterpret_cast<PFN_vkDebugUtilsMessengerCallbackEXT>( pfnUserCallback_ ) );
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic pop
@@ -6717,7 +6717,7 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
   }
   else if ( name == "VkDeviceDeviceMemoryReportCreateInfoEXT" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6726,10 +6726,10 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    DeviceDeviceMemoryReportCreateInfoEXT & setPfnUserCallback( PFN_vkDeviceMemoryReportCallbackEXT pfnUserCallback_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkDeviceMemoryReportCallbackEXT instead." )
+    DeviceDeviceMemoryReportCreateInfoEXT & setPfnUserCallback( VULKAN_HPP_NAMESPACE::PFN_DeviceMemoryReportCallbackEXT pfnUserCallback_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnUserCallback( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_DeviceMemoryReportCallbackEXT>( pfnUserCallback_ ) );
+      return setPfnUserCallback( reinterpret_cast<PFN_vkDeviceMemoryReportCallbackEXT>( pfnUserCallback_ ) );
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic pop
@@ -6738,7 +6738,7 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
   }
   else if ( name == "DirectDriverLoadingInfoLUNARG" )
   {
-    // To be removed around December 2025
+    // To be removed around February 2026
     str = R"(
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic push
@@ -6747,10 +6747,10 @@ std::string VulkanHppGenerator::generateDeprecatedStructSetters( std::string con
 #  endif
 #  pragma GCC diagnostic ignored "-Wcast-function-type"
 #endif
-    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer type from the vk-namespace instead." )
-    DirectDriverLoadingInfoLUNARG & setPfnGetInstanceProcAddr( PFN_vkGetInstanceProcAddrLUNARG pfnGetInstanceProcAddr_ ) VULKAN_HPP_NOEXCEPT
+    VULKAN_HPP_DEPRECATED( "This setter is deprecated. Use the one taking a function pointer of type PFN_vkGetInstanceProcAddrLUNARG instead." )
+    DirectDriverLoadingInfoLUNARG & setPfnGetInstanceProcAddr( VULKAN_HPP_NAMESPACE::PFN_GetInstanceProcAddrLUNARG pfnGetInstanceProcAddr_ ) VULKAN_HPP_NOEXCEPT
     {
-      return setPfnGetInstanceProcAddr( reinterpret_cast<VULKAN_HPP_NAMESPACE::PFN_GetInstanceProcAddLUNARG>( pfnGetInstanceProcAddr_ ) );
+      return setPfnGetInstanceProcAddr( reinterpret_cast<PFN_vkGetInstanceProcAddLUNARG>( pfnGetInstanceProcAddr_ ) );
     }
 #if defined( __clang__ ) || defined( __GNUC__ )
 #  pragma GCC diagnostic pop
@@ -11620,11 +11620,7 @@ std::string VulkanHppGenerator::generateStructConstructorArgument( MemberData co
   std::string str;
   if ( ( memberData.name != "pNext" ) && memberData.value.empty() )
   {
-    if ( memberData.type.type.starts_with( "PFN_vk" ) )
-    {
-      str += "VULKAN_HPP_NAMESPACE::PFN_" + stripPrefix( memberData.type.type, "PFN_vk" ) + " ";
-    }
-    else if ( memberData.arraySizes.empty() )
+    if ( memberData.arraySizes.empty() )
     {
       str += memberData.type.compose( "VULKAN_HPP_NAMESPACE" ) + " ";
     }
@@ -12149,11 +12145,6 @@ std::tuple<std::string, std::string, std::string, std::string>
       assert( member.type.prefix.empty() && member.type.postfix.empty() );  // never encounterd a different case
       type = member.type.type;
     }
-    else if ( member.type.type.starts_with( "PFN_vk" ) )
-    {
-      assert( member.type.prefix.empty() && member.type.postfix.empty() );  // never encounterd a different case
-      type = "VULKAN_HPP_NAMESPACE::PFN_" + stripPrefix( member.type.type, "PFN_vk" );
-    }
     else if ( member.arraySizes.empty() )
     {
       type = member.type.compose( "VULKAN_HPP_NAMESPACE" );
@@ -12236,10 +12227,8 @@ std::string VulkanHppGenerator::generateStructSetter( std::string const & struct
     }
 )";
 
-    std::string memberType         = member.type.type.starts_with( "PFN_vk" )
-                                     ? "VULKAN_HPP_NAMESPACE::PFN_" + stripPrefix( member.type.type, "PFN_vk" )
-                                     : ( member.arraySizes.empty() ? member.type.compose( "VULKAN_HPP_NAMESPACE" )
-                                                                   : generateStandardArray( member.type.compose( "VULKAN_HPP_NAMESPACE" ), member.arraySizes ) );
+    std::string memberType         = member.arraySizes.empty() ? member.type.compose( "VULKAN_HPP_NAMESPACE" )
+                                                               : generateStandardArray( member.type.compose( "VULKAN_HPP_NAMESPACE" ), member.arraySizes );
     const bool  isReinterpretation = !member.bitCount.empty() && member.type.type.starts_with( "Vk" );
     std::string assignment;
     if ( isReinterpretation )

@@ -348,10 +348,10 @@ namespace vk
       return device.createRenderPass( vk::RenderPassCreateInfo( vk::RenderPassCreateFlags(), attachmentDescriptions, subpassDescription ) );
     }
 
-    VKAPI_ATTR vk::Bool32 VKAPI_CALL debugUtilsMessengerCallback( vk::DebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
-                                                                  vk::DebugUtilsMessageTypeFlagsEXT              messageTypes,
-                                                                  const vk::DebugUtilsMessengerCallbackDataEXT * pCallbackData,
-                                                                  void * /*pUserData*/ )
+    vk::Bool32 debugUtilsMessengerCallbackCpp( vk::DebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
+                                               vk::DebugUtilsMessageTypeFlagsEXT              messageTypes,
+                                               vk::DebugUtilsMessengerCallbackDataEXT const * pCallbackData,
+                                               void * /*pUserData*/ )
     {
 #if !defined( NDEBUG )
       switch ( static_cast<uint32_t>( pCallbackData->messageIdNumber ) )
@@ -359,11 +359,11 @@ namespace vk
         case 0:
           // Validation Warning: Override layer has override paths set to C:/VulkanSDK/<version>/Bin
           return vk::False;
-        case 0x822806fa:
+        case 0x82'28'06'fa:
           // Validation Warning: vkCreateInstance(): to enable extension VK_EXT_debug_utils, but this extension is intended to support use by applications when
           // debugging and it is strongly recommended that it be otherwise avoided.
           return vk::False;
-        case 0xe8d1a9fe:
+        case 0xe8'd1'a9'fe:
           // Validation Performance Warning: Using debug builds of the validation layers *will* adversely affect performance.
           return vk::False;
       }
@@ -404,6 +404,17 @@ namespace vk
         }
       }
       return vk::False;
+    }
+
+    VKAPI_ATTR VkBool32 VKAPI_CALL debugUtilsMessengerCallback( VkDebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
+                                                                VkDebugUtilsMessageTypeFlagsEXT              messageTypes,
+                                                                VkDebugUtilsMessengerCallbackDataEXT const * pCallbackData,
+                                                                void *                                       pUserData )
+    {
+      return static_cast<VkBool32>( debugUtilsMessengerCallbackCpp( static_cast<vk::DebugUtilsMessageSeverityFlagBitsEXT>( messageSeverity ),
+                                                                    static_cast<vk::DebugUtilsMessageTypeFlagsEXT>( messageTypes ),
+                                                                    reinterpret_cast<vk::DebugUtilsMessengerCallbackDataEXT const *>( pCallbackData ),
+                                                                    pUserData ) );
     }
 
     uint32_t findGraphicsQueueFamilyIndex( std::vector<vk::QueueFamilyProperties> const & queueFamilyProperties )
@@ -574,20 +585,20 @@ namespace vk
       switch ( oldImageLayout )
       {
         case vk::ImageLayout::eTransferDstOptimal: sourceAccessMask = vk::AccessFlagBits::eTransferWrite; break;
-        case vk::ImageLayout::ePreinitialized: sourceAccessMask = vk::AccessFlagBits::eHostWrite; break;
-        case vk::ImageLayout::eGeneral:  // sourceAccessMask is empty
-        case vk::ImageLayout::eUndefined: break;
-        default: assert( false ); break;
+        case vk::ImageLayout::ePreinitialized    : sourceAccessMask = vk::AccessFlagBits::eHostWrite; break;
+        case vk::ImageLayout::eGeneral           :  // sourceAccessMask is empty
+        case vk::ImageLayout::eUndefined         : break;
+        default                                  : assert( false ); break;
       }
 
       vk::PipelineStageFlags sourceStage;
       switch ( oldImageLayout )
       {
         case vk::ImageLayout::eGeneral:
-        case vk::ImageLayout::ePreinitialized: sourceStage = vk::PipelineStageFlagBits::eHost; break;
+        case vk::ImageLayout::ePreinitialized    : sourceStage = vk::PipelineStageFlagBits::eHost; break;
         case vk::ImageLayout::eTransferDstOptimal: sourceStage = vk::PipelineStageFlagBits::eTransfer; break;
-        case vk::ImageLayout::eUndefined: sourceStage = vk::PipelineStageFlagBits::eTopOfPipe; break;
-        default: assert( false ); break;
+        case vk::ImageLayout::eUndefined         : sourceStage = vk::PipelineStageFlagBits::eTopOfPipe; break;
+        default                                  : assert( false ); break;
       }
 
       vk::AccessFlags destinationAccessMask;
@@ -598,24 +609,24 @@ namespace vk
           destinationAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
           break;
         case vk::ImageLayout::eGeneral:  // empty destinationAccessMask
-        case vk::ImageLayout::ePresentSrcKHR: break;
+        case vk::ImageLayout::ePresentSrcKHR        : break;
         case vk::ImageLayout::eShaderReadOnlyOptimal: destinationAccessMask = vk::AccessFlagBits::eShaderRead; break;
-        case vk::ImageLayout::eTransferSrcOptimal: destinationAccessMask = vk::AccessFlagBits::eTransferRead; break;
-        case vk::ImageLayout::eTransferDstOptimal: destinationAccessMask = vk::AccessFlagBits::eTransferWrite; break;
-        default: assert( false ); break;
+        case vk::ImageLayout::eTransferSrcOptimal   : destinationAccessMask = vk::AccessFlagBits::eTransferRead; break;
+        case vk::ImageLayout::eTransferDstOptimal   : destinationAccessMask = vk::AccessFlagBits::eTransferWrite; break;
+        default                                     : assert( false ); break;
       }
 
       vk::PipelineStageFlags destinationStage;
       switch ( newImageLayout )
       {
-        case vk::ImageLayout::eColorAttachmentOptimal: destinationStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; break;
+        case vk::ImageLayout::eColorAttachmentOptimal       : destinationStage = vk::PipelineStageFlagBits::eColorAttachmentOutput; break;
         case vk::ImageLayout::eDepthStencilAttachmentOptimal: destinationStage = vk::PipelineStageFlagBits::eEarlyFragmentTests; break;
-        case vk::ImageLayout::eGeneral: destinationStage = vk::PipelineStageFlagBits::eHost; break;
-        case vk::ImageLayout::ePresentSrcKHR: destinationStage = vk::PipelineStageFlagBits::eBottomOfPipe; break;
-        case vk::ImageLayout::eShaderReadOnlyOptimal: destinationStage = vk::PipelineStageFlagBits::eFragmentShader; break;
-        case vk::ImageLayout::eTransferDstOptimal:
-        case vk::ImageLayout::eTransferSrcOptimal: destinationStage = vk::PipelineStageFlagBits::eTransfer; break;
-        default: assert( false ); break;
+        case vk::ImageLayout::eGeneral                      : destinationStage = vk::PipelineStageFlagBits::eHost; break;
+        case vk::ImageLayout::ePresentSrcKHR                : destinationStage = vk::PipelineStageFlagBits::eBottomOfPipe; break;
+        case vk::ImageLayout::eShaderReadOnlyOptimal        : destinationStage = vk::PipelineStageFlagBits::eFragmentShader; break;
+        case vk::ImageLayout::eTransferDstOptimal           :
+        case vk::ImageLayout::eTransferSrcOptimal           : destinationStage = vk::PipelineStageFlagBits::eTransfer; break;
+        default                                             : assert( false ); break;
       }
 
       vk::ImageAspectFlags aspectMask;
@@ -997,12 +1008,7 @@ namespace vk
         glfwContext()
         {
           glfwInit();
-          glfwSetErrorCallback(
-            []( int error, const char * msg )
-            {
-              std::cerr << "glfw: "
-                        << "(" << error << ") " << msg << std::endl;
-            } );
+          glfwSetErrorCallback( []( int error, const char * msg ) { std::cerr << "glfw: " << "(" << error << ") " << msg << std::endl; } );
         }
 
         ~glfwContext()
@@ -1025,7 +1031,7 @@ namespace vk
                vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError,
                vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
                  vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation,
-               &vk::su::debugUtilsMessengerCallback };
+               static_cast<PFN_vkDebugUtilsMessengerCallbackEXT>( &vk::su::debugUtilsMessengerCallback ) };
     }
 
 #if defined( NDEBUG )
@@ -1048,7 +1054,8 @@ namespace vk
       vk::DebugUtilsMessageTypeFlagsEXT messageTypeFlags( vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
                                                           vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation );
       vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> instanceCreateInfo(
-        { instanceCreateFlagBits, &applicationInfo, layers, extensions }, { {}, severityFlags, messageTypeFlags, &vk::su::debugUtilsMessengerCallback } );
+        { instanceCreateFlagBits, &applicationInfo, layers, extensions },
+        { {}, severityFlags, messageTypeFlags, static_cast<PFN_vkDebugUtilsMessengerCallbackEXT>( &vk::su::debugUtilsMessengerCallback ) } );
 #endif
       return instanceCreateInfo;
     }
